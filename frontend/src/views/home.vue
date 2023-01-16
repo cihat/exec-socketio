@@ -1,23 +1,41 @@
 <script>
 import { mapActions } from 'vuex'
-
-import HelloWorld from '@/components/hello-world.vue'
+import io from "socket.io-client";
+import Terminal from '@/components/terminal.vue'
 
 export default {
   name: 'Home',
+  data: () => ({
+    socket: {},
+    output: '',
+  }),
   components: {
-    HelloWorld,
+    Terminal
   },
   created() {
-    this.fetchUsers()
+    this.socket = io(process.env.VUE_APP_BASE_PATH)
+  },
+  mounted() {
+    this.socket.emit('join-room')
+
+    this.socket.on('run:output', async (data) => {
+      this.output += new TextDecoder("utf-8").decode(data)
+    })
   },
   methods: {
-    ...mapActions(['fetchUsers']),
+    ...mapActions(['runProject']),
+    // async handleCommand() {
+    //   const { data } = await this.runCommand()
+    //   console.log(data)
+    // },
   },
 }
 </script>
 
-<template lang="pug">
-.home
-  hello-world(msg="Welcome to your stack.")
+<template>
+  <div>
+    <h2>Check Run Command</h2>
+    <button @click="this.runProject()">Run Project</button>
+    <Terminal :output="output" />
+  </div>
 </template>
