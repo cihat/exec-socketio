@@ -6,11 +6,10 @@ import axios from 'axios'
 //   withCredentials: true,
 // })
 
-axios.defaults.baseURL = process.env.VUE_APP_BASE_PATH
+axios.defaults.baseURL = "http://localhost:3000"
 axios.defaults.withCredentials = true
 axios.defaults.headers.common['Content-Type'] = 'application/json'
 axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*'
-
 export default createStore({
   state: {},
   mutations: {},
